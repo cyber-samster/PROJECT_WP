@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HackExplained — Hacking Techniques in Plain English</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #08090b;
+    --green: #00e676;
+    --red: #ff1744;
+    --amber: #ffc400;
+    --blue: #40c4ff;
+    --purple: #ea80fc;
+    --orange: #ff6d00;
+    --teal: #64ffda;
+    --panel: rgba(255,255,255,0.03);
+    --border: rgba(255,255,255,0.07);
+    --text: #cdd5df;
+    --muted: #4e5a66;
+    --white: #f0f4f8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky; top: 0; z-index: 200;
+    background: rgba(8,9,11,0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: var(--white);
+  }
+  .logo span { color: var(--green); }
+
+  .header-right {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 3px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 80px 24px 56px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .hero-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 5px;
+    color: var(--green);
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-size: clamp(30px, 5vw, 52px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+
+  .hero h1 em { color: var(--green); font-style: normal; }
+
+  .hero p {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 auto 36px;
+  }
+
+  /* ── SEARCH ── */
+  .search-wrap {
+    max-width: 480px;
+    margin: 0 auto 28px;
+    position: relative;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--white);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    padding: 13px 20px 13px 42px;
+    outline: none;
+    letter-spacing: 1px;
+    transition: border-color 0.2s;
+    border-radius: 0;
+  }
+
+  .search-wrap input:focus { border-color: var(--green); }
+  .search-wrap input::placeholder { color: var(--muted); }
+  .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 16px; }
+
+  /* ── FILTERS ── */
+  .filters {
+    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px;
+  }
+
+  .filter-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px; letter-spacing: 2px; padding: 6px 14px;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--muted); cursor: pointer; text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--green); color: var(--green);
+    background: rgba(0,230,118,0.06);
+  }
+
+  /* ── MAIN ── */
+  .main {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px 100px;
+  }
+
+  .section-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; letter-spacing: 4px; color: var(--muted);
+    margin-bottom: 24px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  /* ── GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 26px 28px;
+    transition: border-color 0.25s, transform 0.25s, background 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card:hover {
+    border-color: rgba(255,255,255,0.16);
+    background: rgba(255,255,255,0.045);
+    transform: translateY(-3px);
+  }
+
+  /* accent bar on left based on category */
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent-color, var(--green));
+    box-shadow: 0 0 12px var(--accent-color, var(--green));
+  }
+
+  .card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px; gap: 10px;
+  }
+
+  .card-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px; letter-spacing: 2px; padding: 4px 10px;
+    text-transform: uppercase; border: 1px solid currentColor;
+    opacity: 0.85;
+  }
+
+  .card-diff {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px; letter-spacing: 2px;
+    color: var(--muted);
+  }
+
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .card h2 {
+    font-size: 20px; font-weight: 700;
+    color: var(--white); margin-bottom: 6px; letter-spacing: 0.5px;
+  }
+
+  /* analogy box */
+  .analogy {
+    background: rgba(255,255,255,0.04);
+    border-left: 2px solid var(--accent-color, var(--green));
+    padding: 10px 14px;
+    margin: 14px 0;
+    font-size: 13px;
+    color: var(--white);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  .analogy-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px; letter-spacing: 3px;
+    color: var(--accent-color, var(--green));
+    font-style: normal;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .card p {
+    font-size: 14px; color: var(--muted);
+    line-height: 1.7; margin-bottom: 18px;
+  }
+
+  /* how it works steps */
+  .steps {
+    margin: 0 0 18px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .steps li {
+    font-size: 13px; color: var(--text);
+    padding: 5px 0 5px 20px;
+    position: relative;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .steps li:last-child { border-bottom: none; }
+
+  .steps li::before {
+    content: attr(data-n);
+    position: absolute; left: 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--accent-color, var(--green));
+  }
+
+  .card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 6px; gap: 8px; flex-wrap: wrap;
+  }
+
+  .defend-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px; letter-spacing: 1px;
+    color: var(--muted); max-width: 60%;
+    line-height: 1.5;
+  }
+
+  .defend-tag span { color: var(--teal); }
+
+  .source-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; letter-spacing: 2px;
+    color: var(--green); border: 1px solid rgba(0,230,118,0.3);
+    padding: 6px 14px; transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .source-btn:hover {
+    background: rgba(0,230,118,0.1);
+    border-color: var(--green);
+  }
+
+  /* ── NO RESULTS ── */
+  #no-results {
+    display: none; text-align: center; padding: 60px 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px; color: var(--muted); letter-spacing: 2px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 40px; text-align: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; color: var(--muted); letter-spacing: 2px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 0 20px; }
+    .main { padding: 0 16px 60px; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">HACK<span>EXPLAINED</span></div>
+  <div class="header-right">// PLAIN ENGLISH GUIDE</div>
+</header>
+
+<section class="hero">
+  <div class="hero-tag">// No Jargon. Just Clarity.</div>
+  <h1>Hacking Techniques <em>Explained Simply</em></h1>
+  <p>Every major hacking method, broken down in everyday language with real-world analogies — plus links to learn more.</p>
+
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input type="text" id="searchInput" placeholder="Search a technique (e.g. phishing, SQL, brute force)...">
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="social">Social Engineering</button>
+    <button class="filter-btn" data-filter="network">Network</button>
+    <button class="filter-btn" data-filter="web">Web Attacks</button>
+    <button class="filter-btn" data-filter="malware">Malware</button>
+    <button class="filter-btn" data-filter="password">Password</button>
+    <button class="filter-btn" data-filter="wireless">Wireless</button>
+    <button class="filter-btn" data-filter="crypto">Cryptographic</button>
+  </div>
+</section>
+
+<main class="main">
+  <div class="section-label">
+    <span id="resultsLabel">// All Techniques</span>
+    <span id="countLabel">0 techniques</span>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div id="no-results">// NO TECHNIQUES MATCH YOUR SEARCH</div>
+</main>
+
+<footer>
+  HackExplained — Educational purposes only · All source links lead to verified security resources
+</footer>
+
+<script>
+const techniques = [
+  {
+    icon: "🎣",
+    title: "Phishing",
+    category: "social",
+    difficulty: "BEGINNER",
+    accent: "#40c4ff",
+    badge: "Social Engineering",
+    badgeColor: "#40c4ff",
+    analogy: "Imagine receiving a letter that looks exactly like it's from your bank, asking you to call a number. You call — but it's a scammer on the other end pretending to be your bank.",
+    desc: "Phishing is when an attacker sends a fake email, message, or link pretending to be someone you trust — like your bank, Google, or your boss — to trick you into giving up passwords or personal info.",
+    steps: [
+      "Attacker crafts an email mimicking a trusted source (bank, Google, PayPal)",
+      "Victim clicks a link leading to a fake but realistic-looking login page",
+      "Victim enters credentials — sent straight to the attacker",
+      "Attacker now has access to the real account"
+    ],
+    defend: "Enable 2FA · Check sender email carefully · Never click unexpected links",
+    url: "https://www.phishing.org/what-is-phishing"
+  },
+  {
+    icon: "💉",
+    title: "SQL Injection",
+    category: "web",
+    difficulty: "INTERMEDIATE",
+    accent: "#ff1744",
+    badge: "Web Attack",
+    badgeColor: "#ff1744",
+    analogy: "A form asks for your name. Instead of typing 'John', you type a secret command. The database blindly obeys — and hands over all its data.",
+    desc: "SQL Injection tricks a website's database by inserting malicious database commands into input fields like login forms or search boxes. If the site doesn't clean inputs properly, the database executes your commands.",
+    steps: [
+      "Attacker finds a website that passes user input into a database query",
+      "Types SQL commands into a form field (e.g. ' OR '1'='1)",
+      "The database runs the injected command instead of the intended query",
+      "Attacker can dump all data, bypass login, or delete records"
+    ],
+    defend: "Use parameterized queries · Input validation · Web Application Firewalls (WAF)",
+    url: "https://owasp.org/www-community/attacks/SQL_Injection"
+  },
+  {
+    icon: "🤝",
+    title: "Man-in-the-Middle (MitM)",
+    category: "network",
+    difficulty: "INTERMEDIATE",
+    accent: "#ffc400",
+    badge: "Network",
+    badgeColor: "#ffc400",
+    analogy: "You're passing notes to a friend in class. A classmate intercepts every note, reads it, then passes it along. Neither of you knows the notes were read — or changed.",
+    desc: "A MitM attack is when an attacker secretly positions themselves between two communicating parties — like you and your bank — intercepting and sometimes modifying the data flowing between them.",
+    steps: [
+      "Attacker joins the same network as victim (e.g. public Wi-Fi)",
+      "Uses ARP spoofing or rogue access points to redirect traffic through themselves",
+      "Reads, records, or alters data packets in transit",
+      "Victim and server have no idea a third party is listening"
+    ],
+    defend: "Always use HTTPS · Use a VPN · Avoid public Wi-Fi for sensitive tasks",
+    url: "https://www.imperva.com/learn/application-security/man-in-the-middle-attack-mitm/"
+  },
+  {
+    icon: "🔨",
+    title: "Brute Force Attack",
+    category: "password",
+    difficulty: "BEGINNER",
+    accent: "#ff6d00",
+    badge: "Password",
+    badgeColor: "#ff6d00",
+    analogy: "Imagine trying every possible combination on a 4-digit padlock — 0000, 0001, 0002... until it opens. That's exactly brute force.",
+    desc: "Brute force attacks try every possible password combination until the right one is found. Modern tools can test billions of combinations per second, making weak passwords trivially crackable.",
+    steps: [
+      "Attacker obtains a login page or password hash to crack",
+      "Uses automated tools (Hydra, Hashcat) to try millions of passwords",
+      "Dictionary attacks try common words first, then random combos",
+      "Eventually the correct password is found if it's weak enough"
+    ],
+    defend: "Use long passphrases · Account lockouts after failed attempts · Rate limiting",
+    url: "https://owasp.org/www-community/attacks/Brute_force_attack"
+  },
+  {
+    icon: "🐴",
+    title: "Trojan Horse",
+    category: "malware",
+    difficulty: "BEGINNER",
+    accent: "#ea80fc",
+    badge: "Malware",
+    badgeColor: "#ea80fc",
+    analogy: "You download a free game. Unknown to you, hiding inside is a spy that watches everything you do on your computer and reports back to a stranger.",
+    desc: "A Trojan is malware disguised as a legitimate, useful program. Unlike viruses, Trojans don't self-replicate — they rely on tricking you into installing them, then secretly perform malicious actions in the background.",
+    steps: [
+      "Attacker packages malware inside a useful-looking program (game, tool, cracked software)",
+      "Victim downloads and installs it willingly",
+      "Trojan runs silently in background — stealing data, opening backdoors, or logging keystrokes",
+      "Attacker gains remote access or receives stolen information"
+    ],
+    defend: "Only install software from official sources · Use antivirus · Keep OS updated",
+    url: "https://www.kaspersky.com/resource-center/threats/trojans"
+  },
+  {
+    icon: "📡",
+    title: "DNS Spoofing",
+    category: "network",
+    difficulty: "INTERMEDIATE",
+    accent: "#ffc400",
+    badge: "Network",
+    badgeColor: "#ffc400",
+    analogy: "DNS is like the internet's phonebook — you look up 'google.com' and get its real address. DNS spoofing is like someone secretly replacing the phonebook so 'google.com' leads to a fake address.",
+    desc: "DNS spoofing corrupts the DNS cache so that when you type a real website's name, you get redirected to a fake, malicious site — even though the address looks correct in your browser.",
+    steps: [
+      "Attacker intercepts or poisons a DNS resolver's cache",
+      "Victim types a legitimate URL (e.g. bank.com)",
+      "DNS returns the attacker's fake IP instead of the real one",
+      "Victim lands on a convincing fake site and enters credentials"
+    ],
+    defend: "Use DNSSEC · Encrypted DNS (DoH/DoT) · Keep DNS software updated",
+    url: "https://www.cloudflare.com/learning/dns/dns-cache-poisoning/"
+  },
+  {
+    icon: "🎭",
+    title: "Social Engineering",
+    category: "social",
+    difficulty: "BEGINNER",
+    accent: "#40c4ff",
+    badge: "Social Engineering",
+    badgeColor: "#40c4ff",
+    analogy: "A stranger calls claiming to be from IT support. They sound professional and urgent. They ask for your password 'to fix an issue.' You give it. There was no issue.",
+    desc: "Social engineering manipulates people psychologically rather than exploiting software. It exploits trust, urgency, fear, or authority to get victims to willingly give up information or access.",
+    steps: [
+      "Attacker researches the target (LinkedIn, social media, company website)",
+      "Builds a believable pretext — IT support, manager, vendor, delivery person",
+      "Uses urgency or authority to pressure the victim into acting fast",
+      "Victim complies — giving credentials, access, or sensitive data"
+    ],
+    defend: "Verify identities independently · Question urgent requests · Security awareness training",
+    url: "https://www.social-engineer.org/framework/general-discussion/social-engineering-defined/"
+  },
+  {
+    icon: "🌊",
+    title: "DDoS Attack",
+    category: "network",
+    difficulty: "BEGINNER",
+    accent: "#ffc400",
+    badge: "Network",
+    badgeColor: "#ffc400",
+    analogy: "Imagine 100,000 people all walking into a small shop at once. No real customers can get in. The shop is overwhelmed and shuts down — even though no one stole anything.",
+    desc: "A Distributed Denial of Service (DDoS) attack floods a server with so many fake requests from thousands of infected machines (a botnet) that it becomes overwhelmed and stops responding to real users.",
+    steps: [
+      "Attacker controls a botnet of thousands of compromised devices",
+      "Commands all bots to send traffic to the target server simultaneously",
+      "Server is overwhelmed — legitimate users cannot connect",
+      "Service goes down until traffic is filtered or attack stops"
+    ],
+    defend: "CDN / DDoS mitigation services (Cloudflare) · Rate limiting · Traffic scrubbing",
+    url: "https://www.cloudflare.com/learning/ddos/what-is-a-ddos-attack/"
+  },
+  {
+    icon: "🔑",
+    title: "Credential Stuffing",
+    category: "password",
+    difficulty: "BEGINNER",
+    accent: "#ff6d00",
+    badge: "Password",
+    badgeColor: "#ff6d00",
+    analogy: "Someone finds a stolen list of house keys. They try each key on every house in the neighbourhood. Most won't work, but some doors open — because people use the same key everywhere.",
+    desc: "Credential stuffing uses leaked username/password combos from old breaches and tries them on other websites — banking on the fact that many people reuse passwords across multiple services.",
+    steps: [
+      "Attacker purchases or downloads a database of leaked credentials",
+      "Uses automated tools to try those username/password pairs on target sites",
+      "Tools bypass rate limiting using proxies and rotating IPs",
+      "Any successful logins are harvested for account takeover"
+    ],
+    defend: "Use unique passwords for every site · Use a password manager · Enable 2FA",
+    url: "https://owasp.org/www-community/attacks/Credential_stuffing"
+  },
+  {
+    icon: "📜",
+    title: "Cross-Site Scripting (XSS)",
+    category: "web",
+    difficulty: "INTERMEDIATE",
+    accent: "#ff1744",
+    badge: "Web Attack",
+    badgeColor: "#ff1744",
+    analogy: "A comment box on a website lets you write HTML. You write a script instead of a comment. Now every visitor to that page runs your script — without their knowledge.",
+    desc: "XSS lets attackers inject malicious JavaScript into web pages viewed by other users. The victim's browser runs the attacker's code, which can steal cookies, redirect users, or log keystrokes.",
+    steps: [
+      "Attacker finds a website that displays user-submitted content unsanitized",
+      "Injects a script tag containing malicious JavaScript",
+      "Other users visit the page — their browser executes the script",
+      "Script steals session cookies, sends them to attacker, hijacks account"
+    ],
+    defend: "Output encoding · Content Security Policy (CSP) · Input sanitization",
+    url: "https://owasp.org/www-community/attacks/xss/"
+  },
+  {
+    icon: "🛜",
+    title: "Evil Twin Wi-Fi Attack",
+    category: "wireless",
+    difficulty: "INTERMEDIATE",
+    accent: "#00e676",
+    badge: "Wireless",
+    badgeColor: "#00e676",
+    analogy: "You're at a coffee shop and connect to 'CoffeeShop_Free_WiFi'. Unknown to you, the real network is 'CoffeeShop WiFi' — an attacker set up a fake twin with a stronger signal.",
+    desc: "An Evil Twin is a rogue Wi-Fi hotspot that mimics a legitimate one. When you connect, all your internet traffic flows through the attacker's device, letting them intercept everything you send.",
+    steps: [
+      "Attacker sets up a fake access point matching a real one's name (SSID)",
+      "Makes it stronger so devices auto-connect to it over the real one",
+      "Victim connects — all traffic flows through attacker's machine",
+      "Attacker captures login credentials, session cookies, and unencrypted data"
+    ],
+    defend: "Use a VPN on public Wi-Fi · Verify network names · Prefer mobile data for banking",
+    url: "https://www.kaspersky.com/resource-center/preemptive-safety/evil-twin-attacks"
+  },
+  {
+    icon: "🔐",
+    title: "Ransomware",
+    category: "malware",
+    difficulty: "BEGINNER",
+    accent: "#ea80fc",
+    badge: "Malware",
+    badgeColor: "#ea80fc",
+    analogy: "Someone sneaks into your office at night, puts all your files into a locked safe, takes the key, then leaves a note on your desk: 'Pay $10,000 and I'll give you the key.'",
+    desc: "Ransomware encrypts all your files using a key only the attacker has. You can't access anything until you pay the ransom — and even then, there's no guarantee they'll give you the key.",
+    steps: [
+      "Ransomware delivered via phishing email, malicious download, or exploit",
+      "Malware silently encrypts all files on the system and network shares",
+      "Ransom note appears demanding cryptocurrency payment",
+      "Attacker may or may not provide decryption key after payment"
+    ],
+    defend: "Regular offline backups · Keep systems patched · Don't open suspicious attachments",
+    url: "https://www.cisa.gov/stopransomware"
+  },
+  {
+    icon: "⌨️",
+    title: "Keylogging",
+    category: "malware",
+    difficulty: "BEGINNER",
+    accent: "#ea80fc",
+    badge: "Malware",
+    badgeColor: "#ea80fc",
+    analogy: "Imagine someone invisible sitting next to you, writing down every single key you press. Every password, every message, every search — silently recorded.",
+    desc: "A keylogger records every keystroke you make on your keyboard. It runs silently in the background, capturing passwords, messages, and credit card numbers, then sends them to the attacker.",
+    steps: [
+      "Keylogger installed via malware, phishing, or physical USB access",
+      "Runs silently, recording all keystrokes to a log file",
+      "Periodically sends the log to attacker via email or remote server",
+      "Attacker extracts passwords, bank details, and private messages"
+    ],
+    defend: "Use antivirus/anti-malware · Virtual keyboards for passwords · Keep OS updated",
+    url: "https://www.kaspersky.com/resource-center/definitions/keylogger"
+  },
+  {
+    icon: "🚪",
+    title: "Backdoor / RAT",
+    category: "malware",
+    difficulty: "INTERMEDIATE",
+    accent: "#ea80fc",
+    badge: "Malware",
+    badgeColor: "#ea80fc",
+    analogy: "After breaking into a house, a thief installs a hidden spare key under the doormat before leaving. They can come back anytime without breaking in again.",
+    desc: "A backdoor (or Remote Access Trojan / RAT) is malware that creates a hidden, persistent entry point into your system. The attacker can return at any time to control your computer remotely.",
+    steps: [
+      "Backdoor is installed during an initial compromise or embedded in software",
+      "Creates a covert communication channel to attacker's server",
+      "Attacker can issue commands: steal files, take screenshots, activate webcam",
+      "Persists across reboots, often hiding from antivirus"
+    ],
+    defend: "Network monitoring for unusual outbound connections · Antivirus · Reinstall OS if suspected",
+    url: "https://www.malwarebytes.com/backdoor"
+  },
+  {
+    icon: "🌐",
+    title: "Cross-Site Request Forgery (CSRF)",
+    category: "web",
+    difficulty: "ADVANCED",
+    accent: "#ff1744",
+    badge: "Web Attack",
+    badgeColor: "#ff1744",
+    analogy: "You're logged into your bank. You click a link in an email. That link silently triggers a bank transfer in the background — using your already-logged-in session.",
+    desc: "CSRF tricks your browser into sending an authenticated request to a site you're already logged into — without your knowledge. The target site can't tell the request wasn't from you.",
+    steps: [
+      "Victim is logged into a trusted site (e.g. their bank)",
+      "Attacker tricks victim into clicking a malicious link or visiting a page",
+      "Hidden request is sent to the bank using victim's active session/cookie",
+      "Bank processes it as legitimate — transfers money, changes email, etc."
+    ],
+    defend: "CSRF tokens on every state-changing request · SameSite cookie attribute · Re-authentication for sensitive actions",
+    url: "https://owasp.org/www-community/attacks/csrf"
+  },
+  {
+    icon: "🧩",
+    title: "Supply Chain Attack",
+    category: "malware",
+    difficulty: "ADVANCED",
+    accent: "#ea80fc",
+    badge: "Malware",
+    badgeColor: "#ea80fc",
+    analogy: "Instead of breaking into a secure building directly, an attacker infiltrates the company that delivers supplies to that building — hiding something dangerous inside a legitimate delivery.",
+    desc: "Supply chain attacks target a trusted software vendor or service provider rather than the final victim directly. By compromising the supplier, attackers reach thousands of downstream customers at once.",
+    steps: [
+      "Attacker compromises a software vendor, update server, or open-source library",
+      "Injects malicious code into a legitimate update or package",
+      "Victims automatically install the malicious update, trusting the source",
+      "Attacker gains access to all organizations running that software"
+    ],
+    defend: "Software Bill of Materials (SBOM) · Code signing verification · Zero-trust architecture",
+    url: "https://www.ncsc.gov.uk/collection/supply-chain-security"
+  },
+  {
+    icon: "🔓",
+    title: "Password Spraying",
+    category: "password",
+    difficulty: "BEGINNER",
+    accent: "#ff6d00",
+    badge: "Password",
+    badgeColor: "#ff6d00",
+    analogy: "Instead of trying 1000 passwords on one account (which gets locked), try one common password — like 'Summer2024!' — on 1000 accounts. Most won't work, but some will.",
+    desc: "Password spraying avoids account lockouts by trying a single very common password against many accounts. It's slow and quiet — making it hard for security tools to detect.",
+    steps: [
+      "Attacker compiles a list of valid usernames (from LinkedIn, leaked data)",
+      "Picks 1–2 very common passwords (Password1!, Welcome123)",
+      "Tries each password against every account, waiting between attempts",
+      "Any match grants access — often goes undetected for weeks"
+    ],
+    defend: "Ban common passwords · MFA · Monitor for distributed low-rate login failures",
+    url: "https://owasp.org/www-community/attacks/Password_Spraying_Attack"
+  },
+  {
+    icon: "📦",
+    title: "Zero-Day Exploit",
+    category: "web",
+    difficulty: "ADVANCED",
+    accent: "#ff1744",
+    badge: "Web Attack",
+    badgeColor: "#ff1744",
+    analogy: "You discover a secret door in a building that the owners don't know exists. You can walk in anytime — because there's no lock yet, and nobody is guarding it.",
+    desc: "A zero-day exploit targets a vulnerability that the software vendor doesn't know about yet — so there's no patch available. Attackers exploit it freely until the vendor discovers and fixes it.",
+    steps: [
+      "Researcher or attacker discovers an unknown vulnerability in software",
+      "Develops exploit code targeting that specific weakness",
+      "Uses it against targets before vendor is aware — 'zero days' to fix it",
+      "Vendor eventually patches it, but damage may already be done"
+    ],
+    defend: "Defence-in-depth · Behaviour-based detection · Network segmentation · Keep systems updated for known patches",
+    url: "https://www.crowdstrike.com/cybersecurity-101/zero-day-exploit/"
+  },
+  {
+    icon: "📶",
+    title: "Wi-Fi Eavesdropping",
+    category: "wireless",
+    difficulty: "BEGINNER",
+    accent: "#00e676",
+    badge: "Wireless",
+    badgeColor: "#00e676",
+    analogy: "Unencrypted Wi-Fi is like shouting in a crowded room. Anyone nearby with the right tool can hear everything you're saying — your passwords, messages, browsing history.",
+    desc: "On unencrypted or weakly encrypted Wi-Fi networks, attackers can passively capture all data packets flying through the air using tools like Wireshark — reading your traffic without you ever knowing.",
+    steps: [
+      "Attacker uses a Wi-Fi adapter in 'monitor mode' on the same network",
+      "Captures all packets broadcast over the wireless channel",
+      "Analyses packets using tools like Wireshark or Aircrack-ng",
+      "Extracts unencrypted data — credentials, cookies, private messages"
+    ],
+    defend: "Use HTTPS sites only · VPN · Avoid open Wi-Fi · WPA3 encryption on home networks",
+    url: "https://www.wi-fi.org/discover-wi-fi/security"
+  },
+  {
+    icon: "🧠",
+    title: "Pretexting",
+    category: "social",
+    difficulty: "BEGINNER",
+    accent: "#40c4ff",
+    badge: "Social Engineering",
+    badgeColor: "#40c4ff",
+    analogy: "A scammer calls you pretending to be from your phone company verifying your identity. They ask for your date of birth and address — which they then use to take over your account.",
+    desc: "Pretexting is creating a fabricated scenario (pretext) to gain someone's trust and extract information. The attacker plays a character — IT support, auditor, police — and uses it to manipulate the victim.",
+    steps: [
+      "Attacker researches target to build a believable fictional scenario",
+      "Contacts victim in role (IT, HR, government, vendor)",
+      "Uses the pretext to ask for sensitive info or access",
+      "Information is used for further attacks or account takeover"
+    ],
+    defend: "Verify callers via official channels · Don't give info to unsolicited callers · Training",
+    url: "https://www.social-engineer.org/framework/attack-vectors/pretexting/"
+  },
+  {
+    icon: "🔀",
+    title: "ARP Spoofing",
+    category: "network",
+    difficulty: "ADVANCED",
+    accent: "#ffc400",
+    badge: "Network",
+    badgeColor: "#ffc400",
+    analogy: "Your home network is like a neighbourhood. ARP is like everyone knowing each other's address. ARP spoofing is like a fraudster handing out fake address cards — so everyone's mail goes to them first.",
+    desc: "ARP spoofing sends fake ARP messages on a local network, linking the attacker's MAC address to a legitimate IP. All traffic meant for that IP now flows through the attacker — enabling MitM attacks.",
+    steps: [
+      "Attacker sends fake ARP replies to devices on the local network",
+      "Victim's device updates its ARP table with attacker's MAC address",
+      "Victim's traffic is now routed through attacker's machine",
+      "Attacker can intercept, read, or modify traffic in real time"
+    ],
+    defend: "Dynamic ARP Inspection (DAI) on switches · Static ARP entries · Network monitoring",
+    url: "https://www.imperva.com/learn/application-security/arp-spoofing/"
+  },
+  {
+    icon: "#️⃣",
+    title: "Hash Cracking",
+    category: "crypto",
+    difficulty: "INTERMEDIATE",
+    accent: "#64ffda",
+    badge: "Cryptographic",
+    badgeColor: "#64ffda",
+    analogy: "Passwords are stored as scrambled codes (hashes). Cracking is like having a giant cookbook of recipes-to-codes: you find the recipe that produces the same scramble — and that's the password.",
+    desc: "When databases are breached, passwords are often stored as hashes (irreversible-looking scrambles). Hash cracking uses rainbow tables, dictionaries, or brute force to find the original password that produces a matching hash.",
+    steps: [
+      "Attacker obtains a database of hashed passwords from a breach",
+      "Uses tools like Hashcat or John the Ripper with wordlists",
+      "Compares generated hashes to stolen hashes until a match is found",
+      "Weak/common passwords cracked in seconds; strong ones take years"
+    ],
+    defend: "Use bcrypt/scrypt/Argon2 hashing · Long salted passwords · Enforce password complexity",
+    url: "https://www.hashcat.net/wiki/"
+  },
+  {
+    icon: "🔭",
+    title: "Reconnaissance (OSINT)",
+    category: "social",
+    difficulty: "BEGINNER",
+    accent: "#40c4ff",
+    badge: "Social Engineering",
+    badgeColor: "#40c4ff",
+    analogy: "Before robbing a bank, a thief studies it for weeks — shift changes, guard positions, camera locations. Hackers do the same thing online before ever launching an attack.",
+    desc: "Reconnaissance is the information-gathering phase of hacking. Using Open Source Intelligence (OSINT), attackers collect data about their target — employee names, emails, technologies used — all from public sources.",
+    steps: [
+      "Attacker searches LinkedIn, Google, company websites for employee data",
+      "Uses tools like Shodan to find exposed servers and devices",
+      "Identifies technologies, software versions, and potential weak points",
+      "Uses gathered intel to craft targeted phishing or exploitation attempts"
+    ],
+    defend: "Limit public exposure of employee info · Secure exposed services · Regular external scans",
+    url: "https://www.sans.org/white-papers/osint-open-source-intelligence/"
+  },
+  {
+    icon: "🧬",
+    title: "Buffer Overflow",
+    category: "web",
+    difficulty: "ADVANCED",
+    accent: "#ff1744",
+    badge: "Exploit",
+    badgeColor: "#ff1744",
+    analogy: "Imagine a glass that holds 8oz. You pour 12oz in. The extra liquid overflows onto the table — and ruins something next to it. A buffer overflow does the same thing to computer memory.",
+    desc: "A buffer overflow occurs when a program writes more data to a memory buffer than it can hold. The overflow corrupts adjacent memory — and if crafted carefully, an attacker can use this to overwrite program instructions and execute their own code.",
+    steps: [
+      "Attacker finds a program that doesn't check input size",
+      "Sends more data than the buffer can hold",
+      "Overflow corrupts adjacent memory including return addresses",
+      "Attacker's injected code is executed with the program's privileges"
+    ],
+    defend: "Use memory-safe languages · Stack canaries · Address Space Layout Randomisation (ASLR)",
+    url: "https://owasp.org/www-community/vulnerabilities/Buffer_Overflow"
+  }
+];
+
+const grid = document.getElementById('grid');
+const noResults = document.getElementById('no-results');
+const resultsLabel = document.getElementById('resultsLabel');
+const countLabel = document.getElementById('countLabel');
+let activeFilter = 'all';
+let searchTerm = '';
+
+function diffColor(d) {
+  if (d === 'BEGINNER') return '#00e676';
+  if (d === 'INTERMEDIATE') return '#ffc400';
+  return '#ff1744';
+}
+
+function render() {
+  const filtered = techniques.filter(t => {
+    const matchCat = activeFilter === 'all' || t.category === activeFilter;
+    const q = searchTerm.toLowerCase();
+    const matchSearch = !q ||
+      t.title.toLowerCase().includes(q) ||
+      t.desc.toLowerCase().includes(q) ||
+      t.category.toLowerCase().includes(q) ||
+      t.analogy.toLowerCase().includes(q);
+    return matchCat && matchSearch;
+  });
+
+  grid.innerHTML = filtered.map((t, i) => `
+    <div class="card" style="--accent-color:${t.accent}; animation: fadeUp 0.4s ${i * 0.035}s both">
+      <div class="card-header">
+        <span class="card-badge" style="color:${t.badgeColor}; border-color:${t.badgeColor}44">${t.badge}</span>
+        <span class="card-diff" style="color:${diffColor(t.difficulty)}">${t.difficulty}</span>
+      </div>
+      <span class="card-icon">${t.icon}</span>
+      <h2>${t.title}</h2>
+      <p>${t.desc}</p>
+      <div class="analogy">
+        <span class="analogy-label">// REAL WORLD ANALOGY</span>
+        ${t.analogy}
+      </div>
+      <ul class="steps">
+        ${t.steps.map((s, n) => `<li data-n="${n+1}">${s}</li>`).join('')}
+      </ul>
+      <div class="card-footer">
+        <div class="defend-tag">🛡 <span>DEFEND:</span> ${t.defend}</div>
+        <a class="source-btn" href="${t.url}" target="_blank" rel="noopener">Learn More →</a>
+      </div>
+    </div>
+  `).join('');
+
+  noResults.style.display = filtered.length === 0 ? 'block' : 'none';
+
+  const catNames = {
+    all:'All Techniques', social:'Social Engineering', network:'Network Attacks',
+    web:'Web Attacks', malware:'Malware', password:'Password Attacks',
+    wireless:'Wireless Attacks', crypto:'Cryptographic'
+  };
+  resultsLabel.textContent = `// ${catNames[activeFilter] || 'All Techniques'}`;
+  countLabel.textContent = `${filtered.length} technique${filtered.length !== 1 ? 's' : ''}`;
+}
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchTerm = e.target.value;
+  render();
+});
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    render();
+  });
+});
+
+render();
+</script>
+</body>
+</html>

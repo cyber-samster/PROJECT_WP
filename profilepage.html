@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samarth Bhatnagar</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080f09;
+    color: #a8ffcc;
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 480px;
+    border: 1px solid rgba(0,255,100,0.25);
+    padding: 40px;
+    background: rgba(0,255,100,0.03);
+    position: relative;
+  }
+
+  .card::before, .card::after {
+    content: '';
+    position: absolute;
+    width: 14px; height: 14px;
+    border-color: #00ff64;
+    border-style: solid;
+  }
+  .card::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  .card::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+  .status {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #00ff64;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #00ff64;
+    box-shadow: 0 0 6px #00ff64;
+    animation: blink 2s infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  .avatar {
+    font-family: 'Orbitron', monospace;
+    font-size: 48px;
+    font-weight: 700;
+    color: #00ff64;
+    margin-bottom: 4px;
+    letter-spacing: 2px;
+  }
+
+  .name {
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: #fff;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .divider {
+    height: 1px;
+    background: rgba(0,255,100,0.15);
+    margin-bottom: 28px;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-bottom: 16px;
+    gap: 12px;
+  }
+
+  .row .label {
+    color: #4a7a5e;
+    letter-spacing: 2px;
+    flex-shrink: 0;
+  }
+
+  .row .value {
+    color: #00ff64;
+    text-align: right;
+    word-break: break-all;
+  }
+
+  /* ── PROJECTS SECTION ── */
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 4px;
+    color: #2a4a35;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    margin-top: 28px;
+  }
+
+  .links-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .link-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid rgba(0,255,100,0.15);
+    padding: 13px 16px;
+    background: rgba(0,255,100,0.02);
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s, padding-left 0.2s;
+    gap: 12px;
+  }
+
+  .link-card:hover {
+    border-color: rgba(0,255,100,0.5);
+    background: rgba(0,255,100,0.06);
+    padding-left: 20px;
+  }
+
+  .link-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .link-title {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #fff;
+    text-transform: uppercase;
+  }
+
+  .link-desc {
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: #4a7a5e;
+  }
+
+  .link-arrow {
+    color: #00ff64;
+    font-size: 13px;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+
+  .link-card:hover .link-arrow {
+    transform: translateX(4px);
+  }
+
+  .footer {
+    margin-top: 32px;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: #2a4a35;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="status"><span class="dot"></span>SYSTEM ONLINE</div>
+
+  <div class="avatar">SB</div>
+  <div class="name">Samarth Bhatnagar</div>
+
+  <div class="divider"></div>
+
+  <div class="row">
+    <span class="label">REG NO</span>
+    <span class="value">24BCI0082</span>
+  </div>
+  <div class="row">
+    <span class="label">UNIVERSITY</span>
+    <span class="value">VIT VELLORE</span>
+  </div>
+  <div class="row">
+    <span class="label">EMAIL</span>
+    <span class="value">samarthbhatnagar38@gmail.com</span>
+  </div>
+  <div class="row">
+    <span class="label">FIELD</span>
+    <span class="value">CYBER SECURITY</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">// My Projects</div>
+
+  <div class="links-grid">
+    <a class="link-card" href="cybersecincidents.html" target="_blank">
+      <div class="link-info">
+        <span class="link-title">CyberSec Incidents</span>
+        <span class="link-desc">Real-world attack library with source links</span>
+      </div>
+      <span class="link-arrow">→</span>
+    </a>
+    <a class="link-card" href="hackexplained.html" target="_blank">
+      <div class="link-info">
+        <span class="link-title">HackExplained</span>
+        <span class="link-desc">Hacking techniques in plain English</span>
+      </div>
+      <span class="link-arrow">→</span>
+    </a>
+  </div>
+
+  <div class="footer">// PROFILE · 2024</div>
+</div>
+</body>
+</html>

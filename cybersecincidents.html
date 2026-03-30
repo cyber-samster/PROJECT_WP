@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberSec Incidents — Knowledge Base</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07090a;
+    --green: #00e676;
+    --red: #ff1744;
+    --amber: #ffc400;
+    --blue: #00b0ff;
+    --panel: rgba(255,255,255,0.03);
+    --border: rgba(255,255,255,0.08);
+    --text: #c9d1d9;
+    --muted: #555f6a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ── HEADER ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: rgba(7,9,10,0.96);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 15px;
+    color: var(--green);
+    letter-spacing: 2px;
+  }
+
+  .logo span { color: #fff; }
+
+  .header-right {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 80px 40px 60px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hero-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--green);
+    letter-spacing: 5px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+
+  .hero h1 span { color: var(--green); }
+
+  .hero p {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 560px;
+    margin: 0 auto 40px;
+  }
+
+  /* ── SEARCH ── */
+  .search-wrap {
+    max-width: 520px;
+    margin: 0 auto 20px;
+    position: relative;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: #fff;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    padding: 14px 20px 14px 44px;
+    outline: none;
+    letter-spacing: 1px;
+    transition: border-color 0.2s;
+  }
+
+  .search-wrap input:focus { border-color: var(--green); }
+  .search-wrap input::placeholder { color: var(--muted); }
+
+  .search-icon {
+    position: absolute;
+    left: 16px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  /* ── FILTERS ── */
+  .filters {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 60px;
+  }
+
+  .filter-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 7px 16px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--green);
+    color: var(--green);
+    background: rgba(0,230,118,0.06);
+  }
+
+  /* ── GRID ── */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  .section-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 28px;
+    position: relative;
+    transition: border-color 0.25s, background 0.25s, transform 0.25s;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .card:hover {
+    border-color: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.05);
+    transform: translateY(-3px);
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+    gap: 12px;
+  }
+
+  .card-category {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    padding: 4px 10px;
+    text-transform: uppercase;
+  }
+
+  .cat-malware    { color: var(--red);   border: 1px solid rgba(255,23,68,0.35);   background: rgba(255,23,68,0.07); }
+  .cat-breach     { color: var(--amber); border: 1px solid rgba(255,196,0,0.35);   background: rgba(255,196,0,0.07); }
+  .cat-ransomware { color: #ff6d00;      border: 1px solid rgba(255,109,0,0.35);   background: rgba(255,109,0,0.07); }
+  .cat-apt        { color: var(--blue);  border: 1px solid rgba(0,176,255,0.35);   background: rgba(0,176,255,0.07); }
+  .cat-phishing   { color: #e040fb;      border: 1px solid rgba(224,64,251,0.35);  background: rgba(224,64,251,0.07); }
+  .cat-supply     { color: var(--green); border: 1px solid rgba(0,230,118,0.35);   background: rgba(0,230,118,0.07); }
+  .cat-ddos       { color: #ff5252;      border: 1px solid rgba(255,82,82,0.35);   background: rgba(255,82,82,0.07); }
+  .cat-exploit    { color: #69f0ae;      border: 1px solid rgba(105,240,174,0.35); background: rgba(105,240,174,0.07); }
+
+  .card-year {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .card h2 {
+    font-size: 19px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+    line-height: 1.3;
+  }
+
+  .card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .severity {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+
+  .sev-critical { color: var(--red); }
+  .sev-high     { color: var(--amber); }
+  .sev-medium   { color: #69f0ae; }
+
+  .read-more {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--green);
+    border: 1px solid rgba(0,230,118,0.3);
+    padding: 6px 14px;
+    transition: all 0.2s;
+    display: inline-block;
+    text-transform: uppercase;
+  }
+
+  .read-more:hover {
+    background: rgba(0,230,118,0.1);
+    border-color: var(--green);
+  }
+
+  /* hidden card */
+  .card.hidden { display: none; }
+
+  /* ── NO RESULTS ── */
+  #no-results {
+    display: none;
+    text-align: center;
+    padding: 60px 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+
+  /* ── STATS BAR ── */
+  .stats {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 28px;
+    color: var(--green);
+  }
+
+  .stat-label {
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 40px;
+    text-align: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 16px 20px; }
+    .hero { padding: 50px 20px 40px; }
+    .main { padding: 0 20px 60px; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">CYBER<span>SEC</span> // INCIDENTS</div>
+  <div class="header-right">KNOWLEDGE BASE v1.0</div>
+</header>
+
+<section class="hero">
+  <div class="hero-label">// Documented Incidents</div>
+  <h1>Cybersecurity <span>Incident</span> Library</h1>
+  <p>Real-world attacks, breaches, and exploits — with theory, impact, and links to original sources.</p>
+
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input type="text" id="searchInput" placeholder="Search incidents, CVEs, techniques...">
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="malware">Malware</button>
+    <button class="filter-btn" data-filter="breach">Data Breach</button>
+    <button class="filter-btn" data-filter="ransomware">Ransomware</button>
+    <button class="filter-btn" data-filter="apt">APT</button>
+    <button class="filter-btn" data-filter="phishing">Phishing</button>
+    <button class="filter-btn" data-filter="supply">Supply Chain</button>
+    <button class="filter-btn" data-filter="ddos">DDoS</button>
+    <button class="filter-btn" data-filter="exploit">Exploit</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="totalCount">0</div><div class="stat-label">Incidents</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">Categories</div></div>
+    <div class="stat"><div class="stat-num">24+</div><div class="stat-label">Years Covered</div></div>
+  </div>
+</section>
+
+<main class="main">
+  <div class="section-label" id="resultsLabel">// All Incidents</div>
+  <div class="grid" id="grid"></div>
+  <div id="no-results">// NO MATCHING INCIDENTS FOUND</div>
+</main>
+
+<footer>
+  © 2024 CyberSec Incidents — Educational Resource · All links redirect to original verified sources
+</footer>
+
+<script>
+const incidents = [
+  {
+    title: "WannaCry Ransomware Attack",
+    year: "2017",
+    category: "ransomware",
+    severity: "critical",
+    desc: "A worldwide cyberattack that infected over 200,000 computers across 150 countries by exploiting the EternalBlue vulnerability in Windows SMB. It encrypted files and demanded Bitcoin ransom, crippling the UK's NHS and major corporations.",
+    url: "https://www.cisa.gov/news-events/alerts/2017/05/12/indicators-associated-wannacry-ransomware"
+  },
+  {
+    title: "SolarWinds Supply Chain Attack",
+    year: "2020",
+    category: "supply",
+    severity: "critical",
+    desc: "A sophisticated APT (attributed to Cozy Bear/SVR) injected malicious code into SolarWinds' Orion software updates. Around 18,000 organizations downloaded the backdoored update, including US federal agencies and Fortune 500 companies.",
+    url: "https://www.cisa.gov/news-events/cybersecurity-advisories/aa20-352a"
+  },
+  {
+    title: "Equifax Data Breach",
+    year: "2017",
+    category: "breach",
+    severity: "critical",
+    desc: "Attackers exploited an unpatched Apache Struts vulnerability (CVE-2017-5638) to steal sensitive data of 147 million people including SSNs, birth dates, and credit card numbers. The breach remained undetected for 78 days.",
+    url: "https://www.ftc.gov/enforcement/refunds/equifax-data-breach-settlement"
+  },
+  {
+    title: "NotPetya Wiper Attack",
+    year: "2017",
+    category: "malware",
+    severity: "critical",
+    desc: "Disguised as ransomware, NotPetya was a destructive wiper targeting Ukrainian infrastructure that spread globally via EternalBlue and Mimikatz credential theft. It caused over $10 billion in damages — the costliest cyberattack in history.",
+    url: "https://www.wired.com/story/notpetya-cyberattack-ukraine-russia-code-crashed-the-world/"
+  },
+  {
+    title: "Stuxnet Industrial Worm",
+    year: "2010",
+    category: "apt",
+    severity: "critical",
+    desc: "A joint US-Israeli cyberweapon targeting Iranian nuclear centrifuges via Siemens PLCs. Stuxnet was the first known malware to cause physical damage to industrial equipment, setting back Iran's nuclear program by years.",
+    url: "https://www.symantec.com/content/dam/symantec/docs/security-center/white-papers/w32-stuxnet-dossier-11-en.pdf"
+  },
+  {
+    title: "Colonial Pipeline Ransomware",
+    year: "2021",
+    category: "ransomware",
+    severity: "critical",
+    desc: "DarkSide ransomware group attacked Colonial Pipeline's IT network, prompting a shutdown of 5,500 miles of pipeline supplying 45% of the US East Coast's fuel. The company paid $4.4 million in ransom; the FBI later recovered most of it.",
+    url: "https://www.cisa.gov/news-events/cybersecurity-advisories/aa21-131a"
+  },
+  {
+    title: "Log4Shell (Log4j) Vulnerability",
+    year: "2021",
+    category: "exploit",
+    severity: "critical",
+    desc: "CVE-2021-44228 — a zero-day RCE vulnerability in Apache Log4j, one of the most widely used Java logging libraries. Attackers could execute arbitrary code via crafted log messages. Affected millions of enterprise systems globally.",
+    url: "https://nvd.nist.gov/vuln/detail/CVE-2021-44228"
+  },
+  {
+    title: "Target Retail Breach",
+    year: "2013",
+    category: "breach",
+    severity: "high",
+    desc: "Attackers obtained network credentials from a third-party HVAC vendor, then moved laterally to install malware on Target's point-of-sale systems. Over 40 million credit/debit card records were stolen during the holiday shopping season.",
+    url: "https://www.commerce.senate.gov/services/files/24d3c229-4f2f-405d-b8db-a3a67f183883"
+  },
+  {
+    title: "Operation Aurora — Google Hack",
+    year: "2010",
+    category: "apt",
+    severity: "high",
+    desc: "A sophisticated APT (attributed to China's PLA Unit 61398) targeted Google, Adobe, and 30+ other companies via a zero-day IE exploit. Attackers accessed Gmail accounts of Chinese human rights activists and stole source code.",
+    url: "https://www.mcafee.com/blogs/other-blogs/mcafee-labs/operation-aurora-detect-diagnose-respond/"
+  },
+  {
+    title: "Mirai Botnet DDoS",
+    year: "2016",
+    category: "ddos",
+    severity: "high",
+    desc: "Mirai malware infected 600,000+ IoT devices (cameras, routers) using default credentials, forming a massive botnet. It launched record-breaking DDoS attacks, taking down DNS provider Dyn and disrupting Twitter, Netflix, and Reddit.",
+    url: "https://www.cisa.gov/news-events/alerts/2016/10/21/heightened-ddos-threat-posed-mirai-and-other-botnets"
+  },
+  {
+    title: "Yahoo! Mega Data Breach",
+    year: "2013-2014",
+    category: "breach",
+    severity: "critical",
+    desc: "The largest data breach in history — 3 billion user accounts were compromised. Attackers stole names, email addresses, phone numbers, and MD5-hashed passwords. Yahoo disclosed the 2013 breach only in 2016, years after the fact.",
+    url: "https://www.sec.gov/litigation/admin/2018/33-10485.pdf"
+  },
+  {
+    title: "RSA SecurID Breach",
+    year: "2011",
+    category: "apt",
+    severity: "high",
+    desc: "Attackers sent spear-phishing emails with an Excel attachment exploiting an Adobe Flash zero-day to compromise RSA's internal systems. They stole seed values for SecurID tokens, later used in attacks against US defense contractors.",
+    url: "https://blogs.rsa.com/wp-content/uploads/2011/04/Rivner_Anatomy_of_an_Attack.pdf"
+  },
+  {
+    title: "Twitter Bitcoin Scam Hack",
+    year: "2020",
+    category: "phishing",
+    severity: "high",
+    desc: "Attackers used phone spear-phishing (vishing) to trick Twitter employees into providing credentials. They hijacked accounts of Obama, Musk, and Biden to run a Bitcoin scam, netting over $100,000. Three individuals were arrested.",
+    url: "https://www.doj.gov/press-release/2020/07/31/department-justice-case-twitter-hack"
+  },
+  {
+    title: "MOVEit Transfer Zero-Day",
+    year: "2023",
+    category: "exploit",
+    severity: "critical",
+    desc: "Cl0p ransomware group exploited CVE-2023-34362, a SQL injection zero-day in MOVEit Transfer software. Over 2,000 organizations and 60 million individuals were affected, including US government agencies and BBC.",
+    url: "https://nvd.nist.gov/vuln/detail/CVE-2023-34362"
+  },
+  {
+    title: "Bangladesh Bank SWIFT Heist",
+    year: "2016",
+    category: "apt",
+    severity: "critical",
+    desc: "Hackers (attributed to North Korea's Lazarus Group) compromised Bangladesh's central bank and sent fraudulent SWIFT messages to the NY Fed, attempting to steal $951 million. $81 million was successfully transferred before a spelling error halted further transfers.",
+    url: "https://www.bbc.com/news/business-35998396"
+  },
+  {
+    title: "Heartbleed — OpenSSL Bug",
+    year: "2014",
+    category: "exploit",
+    severity: "high",
+    desc: "CVE-2014-0160 — A buffer over-read bug in OpenSSL's TLS heartbeat extension allowed attackers to read up to 64KB of server memory per request, exposing private keys, passwords, and session tokens. Affected approximately 17% of all SSL web servers.",
+    url: "https://nvd.nist.gov/vuln/detail/CVE-2014-0160"
+  },
+  {
+    title: "Uber Data Cover-Up Breach",
+    year: "2016",
+    category: "breach",
+    severity: "high",
+    desc: "Hackers accessed GitHub repositories containing AWS credentials, then stole data of 57 million riders and drivers. Uber's then-CSO paid the attackers $100,000 under the guise of a bug bounty to conceal the breach — later resulting in criminal charges.",
+    url: "https://www.ftc.gov/news-events/news/press-releases/2018/04/ftc-approves-final-order-uber-technologies"
+  },
+  {
+    title: "Sony Pictures Entertainment Hack",
+    year: "2014",
+    category: "apt",
+    severity: "high",
+    desc: "A destructive attack attributed to North Korea's Lazarus Group (in retaliation for the film 'The Interview') wiped Sony's systems, leaked unreleased films, exposed employee PII and salary data, and published embarrassing executive emails.",
+    url: "https://www.fbi.gov/news/press-releases/update-on-sony-investigation"
+  },
+  {
+    title: "Kaseya VSA Ransomware Attack",
+    year: "2021",
+    category: "supply",
+    severity: "critical",
+    desc: "REvil ransomware exploited a zero-day in Kaseya's VSA remote management software to push ransomware to 1,500+ downstream managed service provider clients simultaneously — one of the largest supply chain ransomware attacks ever seen.",
+    url: "https://www.cisa.gov/news-events/cybersecurity-advisories/aa21-232a"
+  },
+  {
+    title: "Marriott / Starwood Breach",
+    year: "2018",
+    category: "breach",
+    severity: "high",
+    desc: "Attackers (suspected Chinese state actors) had persistent access to Starwood's reservation system since 2014. After Marriott acquired Starwood, the breach was discovered — exposing 500 million guest records including passport numbers.",
+    url: "https://www.ftc.gov/news-events/news/press-releases/2019/11/ftc-marriott-international-following-data-breach-affecting-over-100-million-consumers"
+  },
+  {
+    title: "Iran Shamoon Wiper",
+    year: "2012",
+    category: "malware",
+    severity: "high",
+    desc: "The Shamoon malware targeted Saudi Aramco and RasGas, wiping the master boot records of 30,000+ workstations and replacing files with an image of a burning US flag. Attributed to Iranian state actors in response to Stuxnet.",
+    url: "https://www.cisa.gov/news-events/alerts/2012/08/17/shamoon-destructive-malware"
+  },
+  {
+    title: "Google BEC Phishing — $123M Loss",
+    year: "2013-2015",
+    category: "phishing",
+    severity: "high",
+    desc: "Evaldas Rimasauskas registered a company impersonating Quanta Computer, a Taiwanese manufacturer. Using fake invoices and forged contracts, he tricked Google and Facebook employees into wiring $123 million over two years via Business Email Compromise.",
+    url: "https://www.justice.gov/usao-sdny/pr/lithuanian-man-pleads-guilty-wire-fraud-theft-over-100-million-google-and-facebook"
+  },
+  {
+    title: "EternalBlue / NSA Exploit Leak",
+    year: "2017",
+    category: "exploit",
+    severity: "critical",
+    desc: "The Shadow Brokers leaked NSA hacking tools including EternalBlue — an SMBv1 exploit for CVE-2017-0144. This single leaked exploit was later weaponized in WannaCry, NotPetya, and multiple other attacks, affecting millions worldwide.",
+    url: "https://nvd.nist.gov/vuln/detail/CVE-2017-0144"
+  },
+  {
+    title: "Lazarus Group — Crypto Exchange Attacks",
+    year: "2018-2023",
+    category: "apt",
+    severity: "critical",
+    desc: "North Korea's Lazarus Group systematically targeted cryptocurrency exchanges using spear-phishing, trojanized trading apps, and DeFi exploits. The UN estimates they stole over $3 billion in crypto to fund North Korea's weapons programs.",
+    url: "https://www.cisa.gov/news-events/cybersecurity-advisories/aa22-108a"
+  }
+];
+
+// Render
+const grid = document.getElementById('grid');
+const noResults = document.getElementById('no-results');
+const totalCount = document.getElementById('totalCount');
+const resultsLabel = document.getElementById('resultsLabel');
+let activeFilter = 'all';
+let searchTerm = '';
+
+function severityClass(s) {
+  return s === 'critical' ? 'sev-critical' : s === 'high' ? 'sev-high' : 'sev-medium';
+}
+
+function catClass(c) {
+  const map = {
+    malware:'cat-malware', breach:'cat-breach', ransomware:'cat-ransomware',
+    apt:'cat-apt', phishing:'cat-phishing', supply:'cat-supply',
+    ddos:'cat-ddos', exploit:'cat-exploit'
+  };
+  return map[c] || '';
+}
+
+function catLabel(c) {
+  const map = {
+    malware:'Malware', breach:'Data Breach', ransomware:'Ransomware',
+    apt:'APT', phishing:'Phishing', supply:'Supply Chain',
+    ddos:'DDoS', exploit:'Exploit'
+  };
+  return map[c] || c;
+}
+
+function render() {
+  const filtered = incidents.filter(inc => {
+    const matchCat = activeFilter === 'all' || inc.category === activeFilter;
+    const q = searchTerm.toLowerCase();
+    const matchSearch = !q ||
+      inc.title.toLowerCase().includes(q) ||
+      inc.desc.toLowerCase().includes(q) ||
+      inc.category.toLowerCase().includes(q) ||
+      inc.year.includes(q);
+    return matchCat && matchSearch;
+  });
+
+  grid.innerHTML = filtered.map((inc, i) => `
+    <div class="card" style="animation: fadeUp 0.4s ${i * 0.04}s both">
+      <div class="card-top">
+        <span class="card-category ${catClass(inc.category)}">${catLabel(inc.category)}</span>
+        <span class="card-year">${inc.year}</span>
+      </div>
+      <h2>${inc.title}</h2>
+      <p>${inc.desc}</p>
+      <div class="card-footer">
+        <span class="severity ${severityClass(inc.severity)}">■ ${inc.severity.toUpperCase()}</span>
+        <a class="read-more" href="${inc.url}" target="_blank" rel="noopener">Read Source →</a>
+      </div>
+    </div>
+  `).join('');
+
+  noResults.style.display = filtered.length === 0 ? 'block' : 'none';
+  totalCount.textContent = filtered.length;
+
+  const catName = activeFilter === 'all' ? 'All Incidents' : catLabel(activeFilter);
+  resultsLabel.textContent = `// ${catName} — ${filtered.length} result${filtered.length !== 1 ? 's' : ''}`;
+}
+
+// Search
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchTerm = e.target.value;
+  render();
+});
+
+// Filters
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    render();
+  });
+});
+
+// Fade animation
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+`;
+document.head.appendChild(style);
+
+render();
+</script>
+</body>
+</html>
